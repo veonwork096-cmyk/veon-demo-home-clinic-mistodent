@@ -1,0 +1,15 @@
+---
+// The one primary action of the page: a call to the Uzhhorod number (R-001).
+import Icon from "./Icon.astro";
+import { mainPhone } from "../data/clinic";
+interface Props { label?: string; showNumber?: boolean; class?: string; size?: "sm" | "md"; rec?: string; }
+const { label = "Зателефонувати", showNumber = true, class: cls, size = "md", rec = "R-001" } = Astro.props;
+---
+<a class:list={["btn", size === "sm" && "btn--sm", cls]} href={`tel:${mainPhone.tel}`} data-rec={rec}>
+  <Icon name="phone" />
+  {label ? <span>{label}</span> : <span class="visually-hidden">Зателефонувати</span>}
+  {showNumber && <span class="num btn__number">{mainPhone.display}</span>}
+</a>
+<style>
+  .btn__number { font-weight: 500; }
+</style>

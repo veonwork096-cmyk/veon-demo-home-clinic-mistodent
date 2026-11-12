@@ -1,0 +1,16 @@
+---
+// Live "open now" status (signature 2). Without JS it shows the full weekly schedule (W-F005).
+// src/scripts/hours.ts replaces the text by Europe/Kyiv time and lights the window.
+import { hoursLine } from "../data/clinic";
+interface Props { suffix?: string; class?: string; rec?: string; }
+const { suffix, class: cls, rec = "R-013" } = Astro.props;
+---
+<p class:list={["status", cls]} data-status data-rec={rec}>
+  <span class="status__win" aria-hidden="true"></span>
+  <span>
+    <span class="status__text" data-status-text>{hoursLine}</span>{suffix && <span class="status__suffix">{suffix}</span>}
+  </span>
+</p>
+<style>
+  .status__suffix::before { content: ", "; }
+</style>

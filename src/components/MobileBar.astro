@@ -1,0 +1,39 @@
+---
+// R-003: one bottom bar on phones instead of the chat widget and floating buttons. Appears after the hero.
+import Icon from "./Icon.astro";
+import { mainPhone, mapUrl } from "../data/clinic";
+---
+<div class="mbar" data-mbar data-rec="R-003">
+  <a class="btn mbar__call" href={`tel:${mainPhone.tel}`} data-rec="R-001,G-R006"><Icon name="phone" /><span>Зателефонувати</span></a>
+  <a class="btn btn--outline mbar__route" href={mapUrl} target="_blank" rel="noopener"><Icon name="pin" /><span>Маршрут</span><span class="visually-hidden">(Google Maps, нова вкладка)</span></a>
+</div>
+
+<script>
+  const bar = document.querySelector<HTMLElement>("[data-mbar]");
+  const hero = document.getElementById("hero");
+  if (bar && hero && "IntersectionObserver" in window) {
+    bar.classList.add("is-hidden");
+    new IntersectionObserver(([e]) => {
+      const show = !e.isIntersecting && e.boundingClientRect.top < 0;
+      bar.classList.toggle("is-hidden", !show);
+    }).observe(hero);
+  }
+</script>
+
+<style>
+  .mbar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: .5rem;
+    padding: .5rem var(--space) calc(.5rem + env(safe-area-inset-bottom)); background: var(--color-bg); border-top: 1px solid var(--color-decor);
+    box-shadow: 0 -6px 16px var(--color-shadow);
+    transition: transform 250ms var(--ease-out), visibility 0s linear 0s;
+  }
+  .mbar .btn { padding-inline: .75rem; white-space: nowrap; }
+  .mbar.is-hidden { transform: translateY(110%); visibility: hidden; transition: transform 250ms var(--ease-out), visibility 0s linear 250ms; }
+  .mbar__route { --btn-bg: var(--color-bg); }
+  @media (min-width: 64em) { .mbar { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .mbar, .mbar.is-hidden { transition: none; } }
+</style>
+<style is:global>
+  /* Room for the bottom bar lives in the plum footer, so no white strip under it on phones. */
+  @media (max-width: 63.99em) { #footer { padding-bottom: calc(var(--s-4) + 4.5rem + env(safe-area-inset-bottom)); } }
+</style>

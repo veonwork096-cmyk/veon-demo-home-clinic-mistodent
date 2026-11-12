@@ -1,0 +1,12 @@
+---
+// A future page that is not built in the demo yet (menu item, button, card, footer link).
+// Renders an inactive element with a short note instead of a link: never point it to the client's current site.
+// Accessible name = the visible label only; the note «Розділ у розробці» is the description (aria-describedby), said once.
+interface Props { note: string; class?: string; }
+const { note, class: cls } = Astro.props;
+const id = `fl-${Math.random().toString(36).slice(2, 9)}`;
+---
+<span class:list={["future-link", cls]} role="link" aria-disabled="true" tabindex="0" aria-describedby={id}>
+  <slot />
+  <span class="future-link__note" id={id} aria-hidden="true">{note}</span>
+</span>

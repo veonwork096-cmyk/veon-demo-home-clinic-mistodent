@@ -1,0 +1,66 @@
+---
+// W-F035 published prices, W-F010 instalments. The implant promotion (W-F009) expired on 01.10.2026: not shown.
+import Section from "../Section.astro";
+import FutureLink from "../FutureLink.astro";
+import CallButton from "../CallButton.astro";
+import { prices, FUTURE } from "../../data/clinic";
+---
+<Section id="cost" class="section cost" rec="R-006">
+  <div class="container cost__grid">
+    <div class="cost__main">
+      <h2>Вартість і оплата частинами</h2>
+      <dl class="price">
+        {prices.map((p) => (
+          <div class="price__row">
+            <dt>{p.name}</dt>
+            <dd class="num">{p.sum}</dd>
+          </div>
+        ))}
+      </dl>
+      <p class="cost__implant">Імплантація — вартість визначає лікар після консультації (розширена консультація <span class="num">600</span>&nbsp;грн).</p>
+      <p class="cost__note">Перелік неповний. Точну вартість визначає лікар на консультації.</p>
+      <div class="cost__links">
+        <FutureLink note={FUTURE}>Повний прайс</FutureLink>
+      </div>
+    </div>
+    <aside class="offer" aria-labelledby="offer-title" data-reveal>
+      <h3 id="offer-title">Оплата частинами monobank&nbsp;| Universal&nbsp;Bank</h3>
+      <ul class="offer__facts" role="list">
+        <li><span class="num offer__big">3–25</span><span>платежів</span></li>
+        <li><span class="num offer__big">1–400 000</span><span>грн, сума покупки</span></li>
+      </ul>
+      <p>Перший платіж — у момент оформлення. Надавач — АТ «Універсал Банк».</p>
+      <p class="offer__line">Програма лояльності для постійних пацієнтів мережі.</p>
+      <p class="offer__line">Актуальні акції уточнюйте за телефоном.</p>
+      <div class="offer__actions">
+        <CallButton label="Записатися на консультацію" />
+        <FutureLink note={FUTURE}>Умови оплати частинами</FutureLink>
+      </div>
+    </aside>
+  </div>
+</Section>
+
+<style>
+  .cost__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-8); }
+  .cost__main { display: grid; gap: var(--s-4); align-content: start; justify-items: start; }
+  .price { width: 100%; }
+  .price__row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--s-1) var(--s-3); align-items: baseline; padding-block: var(--s-2); border-bottom: 1px solid var(--color-decor); }
+  .price__row:first-child { border-top: 2px solid var(--color-plum); }
+  .price__row dt { font-weight: 500; }
+  .price__row dd { font-weight: 600; color: var(--color-plum); text-align: right; white-space: nowrap; }
+  .cost__note { font-weight: 600; color: var(--color-plum); font-size: var(--fs-lead); max-width: 48ch; }
+  .cost__implant { max-width: 60ch; }
+  .offer { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-3); align-content: start; justify-items: start; padding: var(--s-4) var(--s-3); background: var(--color-peach); border-radius: var(--radius); }
+  .offer h3 { font-weight: 600; }
+  .offer__facts { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-4); }
+  .offer__facts li { display: grid; gap: .25rem; }
+  .offer__big { font: 600 clamp(2rem, 1.6rem + 1.6vw, 3rem)/1 var(--font-display); color: var(--color-plum); }
+  .offer__line { padding-top: var(--s-2); border-top: 1px solid var(--color-plum); width: 100%; font-weight: 500; }
+  .offer__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2) var(--s-3); margin-top: var(--s-1); }
+
+  @media (max-width: 29.99em) { .price__row { grid-template-columns: minmax(0, 1fr); } .price__row dd { text-align: left; white-space: normal; } }
+  @media (min-width: 64em) {
+    .cost__grid { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); column-gap: var(--s-8); }
+    .offer { padding: var(--s-6) var(--s-4); align-self: start; position: sticky; top: calc(var(--header-h) + var(--s-4)); }
+  }
+</style>

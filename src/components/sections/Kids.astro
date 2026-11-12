@@ -1,0 +1,50 @@
+---
+import Section from "../Section.astro";
+import RoomPhoto from "../RoomPhoto.astro";
+import CallButton from "../CallButton.astro";
+import kids from "../../assets/img/services-6-02.jpg";
+---
+<Section id="kids" class="section section--peach kids">
+  <div class="room-grid kids__grid">
+    <RoomPhoto
+      class="kids__media"
+      src={kids}
+      alt="Дитячий кабінет HomeClinic: крісло-жираф, малюк із татом у кріслі"
+      widths={[390, 640, 900, 1200]}
+      sizes="(min-width: 64em) 60vw, 100vw"
+      position="45% 50%"
+    />
+    <div class="kids__text">
+      <h2>Дитяча стоматологія без страху</h2>
+      <p class="kids__figure" data-reveal>
+        <span class="kids__num num">1535</span>
+        <span class="kids__cap">здорових дитячих усмішок, за даними клініки</span>
+      </p>
+      <ul class="kids__facts" role="list">
+        <li>Медикаментозний сон та анестезія</li>
+        <li>Дитячий лікар-стоматолог <a class="kids__doc" href="#doctor-melnychuk">Мельничук І.&nbsp;В.</a></li>
+        <li>Дитячий напрям мережі МістоДент — MistoDent Kids</li>
+      </ul>
+      <CallButton label="Записати дитину" />
+    </div>
+  </div>
+</Section>
+
+<style>
+  .kids__grid { row-gap: var(--s-6); }
+  .kids :global(.kids__media) { grid-column: full-start / full-end; aspect-ratio: 4 / 3; }
+  .kids__text { display: grid; gap: var(--s-4); align-content: center; justify-items: start; }
+  .kids__figure { display: grid; gap: var(--s-1); }
+  .kids__num { font: 600 var(--fs-number)/.9 var(--font-display); color: var(--color-plum); letter-spacing: -.03em; }
+  .kids__cap { color: var(--color-text-muted); font-size: var(--fs-small); max-width: 28ch; }
+  .kids__facts { display: grid; gap: 0; width: 100%; }
+  .kids__facts li { padding-block: var(--s-2); border-top: 1px solid var(--color-plum); font-weight: 500; }
+  .kids__doc { white-space: nowrap; color: var(--color-plum); text-decoration: underline 1px; text-underline-offset: .25em; transition: text-decoration-thickness var(--dur-fast) var(--ease-out); }
+  .kids__doc:hover { text-decoration-thickness: 2px; }
+  .kids__facts li:last-child { border-bottom: 1px solid var(--color-plum); }
+
+  @media (min-width: 64em) {
+    .kids :global(.kids__media) { grid-column: full-start / 9; aspect-ratio: auto; height: 100%; min-height: 36rem; }
+    .kids__text { grid-column: 9 / c-end; padding-left: var(--s-4); }
+  }
+</style>

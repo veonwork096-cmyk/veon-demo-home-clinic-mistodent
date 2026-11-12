@@ -1,0 +1,64 @@
+---
+import Section from "../Section.astro";
+import RoomPhoto from "../RoomPhoto.astro";
+import FutureLink from "../FutureLink.astro";
+import care from "../../assets/img/technologie-photo-1-03.jpg";
+import { FUTURE } from "../../data/clinic";
+
+// W-F007 technologies; W-F011 figures as the clinic's own data; W-F001/W-F003 network as city names only (R-008)
+const rows = [
+  { title: "Мікроскоп і бінокуляри", text: "Лікування каналів під мікроскопом.", figure: { num: "7200", cap: "дорослих пацієнтів за рік" } },
+  { title: "Цифрові протоколи", text: "Концепція «Віртуальний пацієнт»." },
+  { title: "Медикаментозний сон та анестезія", text: "Лікування уві сні." },
+  { title: "Власна зуботехнічна лабораторія", text: "Для імплантації та протезування.", figure: { num: "1000+", cap: "імплантів за рік" } },
+];
+---
+<Section id="care" class="section care" rec="R-008">
+  <div class="room-grid care__grid">
+    <div class="care__text">
+      <h2>Мікроскоп, цифрові протоколи і власна лабораторія</h2>
+      <ol class="care__rows" role="list">
+        {rows.map((r) => (
+          <li class="care__row">
+            <h3>{r.title}</h3>
+            <p class="muted">{r.text}</p>
+            {r.figure && (
+              <p class="care__figure" data-reveal>
+                <span class="care__num num">{r.figure.num}</span>
+                <span class="care__cap">{r.figure.cap}, за даними клініки</span>
+              </p>
+            )}
+          </li>
+        ))}
+      </ol>
+      <p class="care__network">HomeClinic — частина мережі МістоДент: Львів, Харків, Варшава, Краків.</p>
+      <FutureLink note={FUTURE}>Про технології</FutureLink>
+    </div>
+    <RoomPhoto
+      class="care__media"
+      src={care}
+      alt="Лікарка працює з мікроскопом, асистент поруч; кабінет із шпалерами-бібліотекою"
+      widths={[390, 640, 900, 1200]}
+      sizes="(min-width: 64em) 55vw, 100vw"
+      position="40% 40%"
+    />
+  </div>
+</Section>
+
+<style>
+  .care__grid { row-gap: var(--s-6); }
+  .care__text { display: grid; gap: var(--s-4); align-content: start; justify-items: start; }
+  .care__rows { display: grid; width: 100%; }
+  .care__row { display: grid; gap: var(--s-1); padding-block: var(--s-3); border-top: 1px solid var(--color-decor); }
+  .care__row h3 { font-size: var(--fs-lead); font-weight: 600; }
+  .care__figure { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s-1) var(--s-2); margin-top: var(--s-1); }
+  .care__num { font: 600 clamp(2.5rem, 2rem + 2vw, 3.5rem)/1 var(--font-display); color: var(--color-plum); }
+  .care__cap { color: var(--color-text-muted); font-size: var(--fs-small); }
+  .care__network { font-size: var(--fs-lead); max-width: 40ch; }
+  .care :global(.care__media) { grid-column: full-start / full-end; aspect-ratio: 4 / 3; }
+
+  @media (min-width: 64em) {
+    .care__text { grid-column: c-start / 7; grid-row: 1; }
+    .care :global(.care__media) { grid-column: 7 / full-end; grid-row: 1; aspect-ratio: auto; height: 100%; min-height: 40rem; max-height: 56rem; }
+  }
+</style>

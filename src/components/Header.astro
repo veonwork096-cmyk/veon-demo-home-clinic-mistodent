@@ -1,0 +1,110 @@
+---
+// Sticky header (R-001: Uzhhorod number as text). Mobile menu uses the native popover API: works without JS.
+import { Image } from "astro:assets";
+import logo from "../assets/img/new-logo-site.png";
+import Icon from "./Icon.astro";
+import FutureLink from "./FutureLink.astro";
+import CallButton from "./CallButton.astro";
+import StatusLine from "./StatusLine.astro";
+import { nav, mainPhone, address, FUTURE } from "../data/clinic";
+---
+<header class="header" id="header">
+  <div class="header__bar container">
+    <a class="header__logo" href="#top" aria-label="MistoDent HomeClinic, на початок сторінки">
+      <Image src={logo} alt="" width={125} height={56} widths={[125, 250]} sizes="125px" loading="eager" format="webp" />
+    </a>
+    <nav class="header__nav" aria-label="Головне меню">
+      <ul role="list">
+        {nav.map((n) => <li><a class="header__link" href={n.href}>{n.label}</a></li>)}
+      </ul>
+    </nav>
+    <div class="header__end">
+      <p class="lang" aria-label="Мова сайту">
+        <span class="lang__on" aria-current="true">UA</span>
+        <span aria-hidden="true">/</span>
+        <FutureLink note={FUTURE} class="lang__ru"><span lang="ru">RU</span></FutureLink>
+      </p>
+      <CallButton class="header__call" label="" size="sm" />
+      <a class="btn btn--sm header__call-m" href={`tel:${mainPhone.tel}`} data-rec="R-001">
+        <Icon name="phone" /><span>Подзвонити</span>
+      </a>
+      <button class="header__burger" type="button" popovertarget="menu" aria-label="Відкрити меню">
+        <Icon name="menu" />
+      </button>
+    </div>
+  </div>
+
+  <div id="menu" class="menu" popover>
+    <div class="menu__top container">
+      <span class="menu__title">Меню</span>
+      <button class="header__burger" type="button" popovertarget="menu" popovertargetaction="hide" aria-label="Закрити меню">
+        <Icon name="close" />
+      </button>
+    </div>
+    <nav class="container" aria-label="Меню для телефона">
+      <ul role="list" class="menu__list">
+        {nav.map((n) => <li><a class="menu__link" href={n.href} data-menu-link>{n.label}</a></li>)}
+      </ul>
+      <div class="menu__contacts">
+        <StatusLine />
+        <p>{address.street}, {address.floor}, {address.city}</p>
+        <CallButton class="menu__call" />
+      </div>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const menu = document.getElementById("menu");
+  document.querySelectorAll("[data-menu-link]").forEach((a) =>
+    a.addEventListener("click", () => (menu as HTMLElement & { hidePopover?: () => void })?.hidePopover?.()),
+  );
+</script>
+
+<style>
+  .header { position: sticky; top: 0; z-index: 50; background: var(--color-bg); border-bottom: 1px solid var(--color-decor); }
+  .header__bar { display: flex; align-items: center; gap: var(--s-3); min-height: var(--header-h); }
+  .header__logo { display: block; flex: none; border-radius: var(--radius); }
+  .header__logo img { width: auto; height: 40px; }
+  .header__nav { display: none; margin-inline: auto; }
+  .header__nav ul { display: flex; gap: var(--s-4); }
+  .header__link {
+    display: inline-flex; align-items: center; min-height: 2.75rem; color: var(--color-text); font-weight: 500; font-size: 1rem; text-decoration: none;
+    background: linear-gradient(var(--color-plum), var(--color-plum)) 0 calc(100% - .5rem) / 0 2px no-repeat;
+    transition: background-size var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+  }
+  .header__link:hover { color: var(--color-plum); background-size: 100% 2px; }
+  .header__end { display: flex; align-items: center; gap: var(--s-2); margin-left: auto; }
+  .lang { display: none; align-items: center; gap: .375rem; font-size: 1rem; font-weight: 500; }
+  .lang__on { color: var(--color-plum); text-decoration: underline 2px; text-underline-offset: .3em; }
+  .header__call { display: none; }
+  .header__call-m { padding: 0 .875rem; }
+  .header__burger {
+    display: inline-grid; place-items: center; width: 2.75rem; height: 2.75rem; padding: 0; border: 2px solid var(--color-plum);
+    border-radius: var(--radius); background: transparent; color: var(--color-plum); cursor: pointer;
+    transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+  }
+  .header__burger:hover { background: var(--color-plum); color: var(--color-on-deep); }
+  .header__burger :global(svg) { width: 1.375rem; height: 1.375rem; }
+
+  .menu { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: var(--color-bg); color: var(--color-text); overflow-y: auto; }
+  .menu::backdrop { background: var(--color-scrim); }
+  .menu__top { display: flex; align-items: center; justify-content: space-between; min-height: var(--header-h); border-bottom: 1px solid var(--color-decor); }
+  .menu__title { font-family: var(--font-display); font-weight: 600; color: var(--color-plum); font-size: 1.25rem; }
+  .menu__list { padding-block: var(--s-3); }
+  .menu__link { display: flex; align-items: center; min-height: 3.5rem; font-family: var(--font-display); font-size: 2rem; font-weight: 500; color: var(--color-plum); text-decoration: none; }
+  .menu__link:hover { text-decoration: underline 2px; text-underline-offset: .2em; }
+  .menu__contacts { display: grid; gap: var(--s-2); padding-block: var(--s-3) var(--s-6); border-top: 1px solid var(--color-decor); }
+  .menu__contacts :global(.menu__call) { width: 100%; }
+
+  @media (max-width: 22.49em) {
+    .header__call-m span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    .header__call-m { width: 2.75rem; padding: 0; }
+  }
+  @media (min-width: 64em) {
+    .header__logo img { height: 56px; }
+    .header__nav, .lang { display: flex; }
+    .header__call { display: inline-flex; }
+    .header__call-m, .header__burger { display: none; }
+  }
+</style>

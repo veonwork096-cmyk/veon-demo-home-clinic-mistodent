@@ -1,0 +1,27 @@
+{
+  "name": "veon-demo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "postbuild": "node scripts/veon-event.mjs demo_build",
+    "typecheck": "astro check",
+    "lint": "astro check --minimumSeverity warning",
+    "test": "node tests/e2e.mjs"
+  },
+  "engines": {
+    "node": ">=18.20.8"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "astro": "5.14.1",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@fontsource-variable/geologica": "^5.3.0",
+    "@fontsource-variable/golos-text": "^5.3.0"
+  }
+}

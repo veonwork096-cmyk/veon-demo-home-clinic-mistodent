@@ -1,0 +1,59 @@
+/* Hallmark · shape: rooms (photo-room sections in full-width colour bands) · genre: editorial · theme: custom · job: book · idea: "Клініка, в яку приходять як додому: кожен розділ головної — справжня кімната HomeClinic на Фединця, 19" · vibe: "warm family home, precise care, plum and peach" · surface: absolute
+ * paper: #FFFFFF · accent: #D7211B · display: Geologica · body: Golos Text · hero: H1 left over six columns, call button with the number, live open-window status and address, clinic living-room photo bleeding to the right edge with a stepped roofline top · nav: sticky bar, logo, five anchors, UA/RU, red call button with number; 390 call + burger, bottom call/route bar · footer: plum band, white logo, address, hours, three numbers, pages · imagery: client photos · signature: stepped roofline from the logo cutting the four room photos, and the status window that lights up while the clinic is open
+ * axes: light/geometric-sans/chromatic-plum · posture: committed · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H5 E4 S5 R4 V5 · weakest: E, hero photo is only 1140x720 from the client; cropped to the living-room part and kept under 760 px wide instead of upscaling */
+/* Hallmark · waive 7b · paper token --color-bg is #FFFFFF, surface: absolute in stamp · concept.md picks clean white for the cabinet and lets plum and peach bands carry warmth */
+/* Hallmark · waive 39b · a.btn 56px and situation rows 96px · concept.md sets the call button at 56 px for older patients and the four situations as large Geologica rows */
+/* Hallmark · waive 23 · posture: committed, the action red sits only on call buttons and stays under 8% of the viewport · plum is the ink of headings and the focus colour from concept.md, not an accent */
+/* Hallmark · answered F20 · the hero proof sits under the text column while the living-room photo spans both rows */
+/* Line 1 of this file is the Hallmark stamp (docs/process/hallmark.md). Tokens come only from design/concept.md. */
+:root {
+  /* colour roles (concept.md, «Дизайн-система для FULL») */
+  --color-bg: #FFFFFF;
+  --color-text: #221A24;
+  --color-text-muted: #5F5462;
+  --color-plum: #3B1D3F;
+  --color-peach: #F5D9C6;
+  --color-action: #D7211B;
+  --color-action-hover: #B51A15;
+  --color-on-deep: #FFFFFF;
+  --color-decor: #E8D6CB;
+  --color-accent: var(--color-plum);   /* focus ring and active states on light surfaces */
+  --color-focus: var(--color-plum);
+  --color-shadow: rgb(34 26 36 / .14);
+  --color-scrim: rgb(34 26 36 / .5);
+
+  /* type */
+  --font-display: "Geologica", "Geologica Fallback", system-ui, sans-serif;
+  --font-body: "Golos Text", "Golos Text Fallback", system-ui, sans-serif;
+  --fs-h1: clamp(2.5rem, 1.35rem + 4.9vw, 5.5rem);        /* 40 → 88 */
+  --fs-h2: clamp(2rem, 1.55rem + 1.9vw, 3.5rem);          /* 32 → 56 */
+  --fs-h3: clamp(1.375rem, 1.24rem + .6vw, 1.75rem);      /* 22 → 28 */
+  --fs-lead: clamp(1.125rem, 1.08rem + .2vw, 1.25rem);    /* 18 → 20 */
+  --fs-body: clamp(1.0625rem, 1.04rem + .1vw, 1.125rem);  /* 17 → 18 */
+  --fs-small: 1rem;                                        /* 16 */
+  --fs-number: clamp(5.5rem, 3.9rem + 6.8vw, 9rem);       /* 88 → 144 */
+  --lh-tight: 1.06;
+  --lh-head: 1.1;
+  --lh-text: 1.6;
+
+  /* space: step 8 */
+  --s-1: .5rem; --s-2: 1rem; --s-3: 1.5rem; --s-4: 2rem; --s-6: 3rem; --s-8: 4rem; --s-12: 6rem; --s-16: 8rem;
+  --section-y: clamp(4.5rem, 3rem + 5vw, 8rem);           /* 72 → 128 */
+  --space: clamp(1.25rem, .5rem + 3.2vw, 3.75rem);        /* page gutter 20 → 60 */
+  --gap: clamp(1rem, .8rem + .6vw, 1.5rem);               /* 16 → 24 */
+  --container: 1320px;
+
+  /* shape */
+  --radius: 6px;
+  --btn-h: 3.5rem;
+  --header-h: 64px;
+  --roof: clamp(2.25rem, 1.4rem + 3vw, 4.5rem);           /* roofline step height 36 → 72 */
+
+  /* motion */
+  --ease-out: cubic-bezier(.2, .7, .2, 1);
+  --dur: 600ms;
+  --dur-fast: 180ms;
+  --dur-roof: 800ms;
+}
+@media (min-width: 64em) { :root { --header-h: 80px; } }

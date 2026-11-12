@@ -1,0 +1,117 @@
+/* MistoDent HomeClinic — shared styles. Every colour and font comes from tokens.css. */
+body { font-size: var(--fs-body); line-height: var(--lh-text); font-synthesis: none; font-feature-settings: "kern"; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; color: var(--color-plum); margin: 0; }
+h1 { font-size: var(--fs-h1); line-height: var(--lh-tight); letter-spacing: -.02em; }
+h2 { font-size: var(--fs-h2); line-height: var(--lh-head); letter-spacing: -.015em; }
+h3 { font-size: var(--fs-h3); line-height: 1.2; font-weight: 500; }
+p { margin: 0; }
+html { overflow-x: clip; scrollbar-color: var(--color-plum) var(--color-peach); }
+body { overflow-x: clip; }
+::selection { background: var(--color-peach); color: var(--color-plum); }
+ul, ol, dl, dd { margin: 0; padding: 0; }
+ul[role="list"], ol[role="list"] { list-style: none; }
+.num { font-variant-numeric: tabular-nums lining-nums; }
+.measure { max-width: 60ch; }
+.muted { color: var(--color-text-muted); }
+
+/* Focus: plum ring on light surfaces, peach on plum (concept «Палітра і контраст») */
+:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; transition: none; }
+.on-deep { --color-focus: var(--color-peach); }
+
+.skip-link { background: var(--color-plum); color: var(--color-on-deep); border-radius: var(--radius); font-weight: 600; text-decoration: none; }
+
+/* Sections and container */
+.section { padding-block: var(--section-y); }
+.section--peach { background: var(--color-peach); }
+.section--plum { background: var(--color-plum); color: var(--color-on-deep); }
+.section--plum h2, .section--plum h3 { color: var(--color-on-deep); }
+.container { width: min(100% - 2 * var(--space), var(--container)); margin-inline: auto; }
+
+/* 12-column grid whose photo tracks can bleed to the window edge (concept: «фото-кімнати виходять до краю вікна») */
+.room-grid {
+  display: grid;
+  column-gap: var(--gap);
+  grid-template-columns:
+    [full-start] minmax(calc(var(--space) - var(--gap)), 1fr)
+    [c-start] repeat(12, minmax(0, calc((var(--container) - 11 * var(--gap)) / 12)))
+    [c-end] minmax(calc(var(--space) - var(--gap)), 1fr) [full-end];
+}
+.room-grid > * { grid-column: c-start / c-end; min-width: 0; }
+.room-grid > .bleed { grid-column: full-start / full-end; }
+
+/* Signature: the stepped roofline from the logo cuts the top of the four room photos */
+.room { position: relative; margin: 0; }
+.room img { width: 100%; height: 100%; object-fit: cover; }
+.roof {
+  --r: var(--roof);
+  --y0: 0px; --y1: calc(var(--r) * .34); --y2: calc(var(--r) * .67); --y3: var(--r);
+  clip-path: polygon(0 var(--y2), 20% var(--y2), 20% var(--y0), 38% var(--y0), 38% var(--y1), 60% var(--y1), 60% var(--y2), 80% var(--y2), 80% var(--y3), 100% var(--y3), 100% 100%, 0 100%);
+  transition: clip-path var(--dur-roof) var(--ease-out), opacity var(--dur) var(--ease-out), transform var(--dur) var(--ease-out);
+}
+.roof--mirror { clip-path: polygon(0 var(--y3), 20% var(--y3), 20% var(--y2), 40% var(--y2), 40% var(--y1), 62% var(--y1), 62% var(--y0), 80% var(--y0), 80% var(--y2), 100% var(--y2), 100% 100%, 0 100%); }
+/* Before it enters the viewport the roof is flat; scripting only (content stays visible without JS). */
+.js .roof[data-reveal]:not(.is-visible) { --y0: var(--r); --y1: var(--r); --y2: var(--r); }
+@keyframes roof-rise { from { --y0: var(--r); --y1: var(--r); --y2: var(--r); } }
+@property --y0 { syntax: "<length>"; inherits: true; initial-value: 0px; }
+@property --y1 { syntax: "<length>"; inherits: true; initial-value: 0px; }
+@property --y2 { syntax: "<length>"; inherits: true; initial-value: 0px; }
+
+/* Buttons */
+.btn {
+  --btn-bg: var(--color-action); --btn-fg: var(--color-on-deep); --btn-bd: var(--color-action);
+  display: inline-flex; align-items: center; justify-content: center; gap: .625rem;
+  min-height: var(--btn-h); padding: 0 1.5rem; border-radius: var(--radius);
+  border: 2px solid var(--btn-bd); background: var(--btn-bg); color: var(--btn-fg);
+  font: 600 1.125rem/1.2 var(--font-body); text-decoration: none; text-align: center; cursor: pointer;
+  flex-wrap: wrap; row-gap: .125rem; padding-block: .5rem; max-width: 100%;
+  transition: background-color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+}
+.btn svg { width: 1.25rem; height: 1.25rem; flex: none; }
+.btn > .num { white-space: nowrap; }
+.btn:hover { --btn-bg: var(--color-action-hover); --btn-bd: var(--color-action-hover); }
+.btn:active { transform: scale(.98); }
+.btn--outline { --btn-bg: transparent; --btn-fg: var(--color-plum); --btn-bd: var(--color-plum); }
+.btn--outline:hover { --btn-bg: var(--color-plum); --btn-fg: var(--color-on-deep); --btn-bd: var(--color-plum); }
+.btn--sm { min-height: 2.75rem; padding: 0 1rem; font-size: 1rem; }
+.on-deep .btn:not(.btn--outline) { --btn-bd: var(--color-peach); }
+.btn[disabled], .btn[aria-disabled="true"] {
+  --btn-bg: transparent; --btn-fg: var(--color-text-muted); --btn-bd: var(--color-text-muted);
+  cursor: not-allowed; opacity: .75; transform: none;
+}
+
+/* Text links: underline slides in (micro-interaction 5) */
+.link {
+  display: inline-flex; align-items: center; gap: .5rem; min-height: 2.75rem;
+  color: var(--color-plum); font-weight: 600; text-decoration: none;
+  background: linear-gradient(currentColor, currentColor) 0 calc(100% - .55rem) / 100% 2px no-repeat;
+  transition: background-size var(--dur-fast) var(--ease-out);
+}
+.link svg { width: 1.125rem; height: 1.125rem; flex: none; transition: transform var(--dur-fast) var(--ease-out); }
+.link:hover { background-size: 0 2px; }
+.link:hover svg { transform: translateX(3px); }
+.on-deep .link { color: var(--color-peach); }
+
+/* FutureLink restyle (base mechanics in global.css) */
+.future-link { color: var(--color-text-muted); text-decoration: underline dotted 1px; text-underline-offset: .25em; min-height: 2.75rem; }
+.future-link:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+.future-link__note[aria-hidden="true"] { left: 0; transform: translateY(-4px); background: var(--color-plum); color: var(--color-on-deep); font-size: .875rem; font-weight: 500; }
+.future-link:hover .future-link__note, .future-link:focus-visible .future-link__note[aria-hidden="true"] { transform: translateY(0); }
+.on-deep .future-link { color: var(--color-peach); }
+.on-deep .future-link__note[aria-hidden="true"] { background: var(--color-peach); color: var(--color-plum); }
+
+/* Status window (signature 2): the window "lights up" while the clinic is open */
+.status { display: flex; align-items: center; gap: .75rem; font-weight: 500; min-width: 0; }
+.status__win { position: relative; flex: none; width: 16px; height: 20px; border: 2px solid currentColor; border-radius: 1px; color: var(--color-plum); }
+.status__win::before { content: ""; position: absolute; inset: 0; background: var(--color-peach); opacity: 0; transition: opacity 400ms var(--ease-out); }
+.status__win::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; border-top: 2px solid currentColor; }
+.status.is-open .status__win::before { opacity: 1; }
+.on-deep .status__win { color: var(--color-peach); }
+
+/* Reveal (motion 4): softer on phones */
+@media (max-width: 47.99em) { .js [data-reveal]:not(.is-visible) { transform: translateY(12px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .js .roof[data-reveal]:not(.is-visible) { --y0: 0px; --y1: calc(var(--r) * .34); --y2: calc(var(--r) * .67); }
+  .btn:active { transform: none; }
+  .link:hover svg { transform: none; }
+}

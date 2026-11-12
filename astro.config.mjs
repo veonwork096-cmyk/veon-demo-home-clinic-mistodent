@@ -1,0 +1,9 @@
+// VEON demo base: technical setup only. Visual design comes from design/concept.md of each client.
+import { defineConfig } from "astro/config";
+
+export default defineConfig({
+  build: { inlineStylesheets: "auto" },
+  compressHTML: true,
+  // Scoped class is passed to child components through `class` (Section, RoomPhoto, CallButton).
+  scopedStyleStrategy: "class",
+});

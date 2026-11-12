@@ -1,0 +1,87 @@
+---
+// W-F012: six doctors with specialisation (R-012) and six team members as a list.
+import Section from "../Section.astro";
+import FutureLink from "../FutureLink.astro";
+import CallButton from "../CallButton.astro";
+import { Picture } from "astro:assets";
+import jacyk from "../../assets/img/dr-jacyk-kateryna.jpg";
+import tenyaeva from "../../assets/img/dr-tenyaeva-anna.jpg";
+import lukach from "../../assets/img/dr-lukach-yaroslav.jpg";
+import beznoskov from "../../assets/img/dr-yaroslav-beznoskov.jpg";
+import melnychuk from "../../assets/img/dr-melnychuk-ivan.jpg";
+import harienko from "../../assets/img/dr-harienko-vladyslav.jpg";
+import { doctors, team, FUTURE } from "../../data/clinic";
+const photos = { jacyk, tenyaeva, lukach, beznoskov, melnychuk, harienko };
+---
+<Section id="doctors" class="section section--plum on-deep doctors" rec="R-012">
+  <div class="container">
+    <div class="doctors__head">
+      <h2>Лікарі й команда</h2>
+      <p class="doctors__intro">Шість лікарів HomeClinic на Фединця, 19 — кожен у своєму напрямі.</p>
+    </div>
+  </div>
+  <div class="doctors__rail-wrap container">
+    <ul class="doctors__rail" role="list" aria-label="Лікарі" tabindex="0">
+      {doctors.map((d) => (
+        <li class="doc" id={`doctor-${d.img}`} data-reveal>
+          <div class="doc__photo">
+            <Picture src={photos[d.img]} alt={`${d.name}, ${d.role.toLowerCase()}`} widths={[220, 330, 440]} sizes="(min-width: 64em) 200px, 62vw" formats={["avif", "webp"]} fallbackFormat="jpg" quality={76} loading="lazy" />
+          </div>
+          <h3 class="doc__name">{d.name}</h3>
+          <p class="doc__role">{d.role}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+  <div class="container doctors__bottom">
+    <div class="team">
+      <h3 class="team__title">Команда клініки</h3>
+      <dl class="team__list">
+        {team.map((t) => (
+          <div class="team__row"><dt>{t.role}</dt><dd>{t.name}</dd></div>
+        ))}
+      </dl>
+    </div>
+    <div class="doctors__actions">
+      <CallButton label="Записатися на консультацію" />
+      <FutureLink note={FUTURE}>Усі лікарі</FutureLink>
+    </div>
+  </div>
+</Section>
+
+<style>
+  .doctors__head { display: grid; gap: var(--s-2); margin-bottom: var(--s-6); }
+  .doctors__intro { color: var(--color-peach); font-size: var(--fs-lead); max-width: 44ch; }
+  .doctors__rail {
+    display: grid; grid-auto-flow: column; grid-auto-columns: 62%; gap: var(--gap);
+    overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; padding-bottom: var(--s-2);
+    scrollbar-color: var(--color-peach) transparent;
+  }
+  .doctors__rail:focus-visible { outline-offset: 4px; }
+  .doc { scroll-snap-align: start; display: grid; gap: var(--s-1); align-content: start; }
+  .doc__photo { aspect-ratio: 4 / 5; overflow: hidden; background: var(--color-peach); margin-bottom: var(--s-1); }
+  .doc__photo :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .doc__name {
+    font: 500 1.25rem/1.25 var(--font-display); color: var(--color-on-deep); justify-self: start;
+    background: linear-gradient(var(--color-peach), var(--color-peach)) 0 100% / 0 2px no-repeat;
+    transition: background-size var(--dur-fast) var(--ease-out);
+  }
+  .doc:hover .doc__name { background-size: 100% 2px; }
+  .doc__role { color: var(--color-peach); font-size: var(--fs-small); }
+  .doctors__bottom { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-6); margin-top: var(--s-8); }
+  .team__title { font-size: var(--fs-lead); font-weight: 600; margin-bottom: var(--s-2); }
+  .team__list { display: grid; }
+  .team__row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--s-2); padding-block: .75rem; border-top: 1px solid var(--color-text-muted); }
+  .team__row dt { color: var(--color-peach); font-size: var(--fs-small); }
+  .team__row dd { color: var(--color-on-deep); font-weight: 500; }
+  .doctors__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2) var(--s-4); align-self: end; }
+
+  @media (max-width: 63.99em) { .doctors__rail { margin-inline: calc(-1 * var(--space)); padding-inline: var(--space); scroll-padding-inline: var(--space); } }
+  @media (min-width: 40em) { .doctors__rail { grid-auto-columns: 32%; } }
+  @media (min-width: 64em) {
+    .doctors__head { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: end; }
+    .doctors__rail { grid-auto-flow: row; grid-template-columns: repeat(6, minmax(0, 1fr)); overflow: visible; padding: 0; }
+    .doctors__bottom { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); column-gap: var(--s-8); }
+    .team__list { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: var(--s-4); }
+  }
+</style>

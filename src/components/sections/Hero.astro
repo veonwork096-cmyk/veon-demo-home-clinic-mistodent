@@ -1,0 +1,69 @@
+---
+import Section from "../Section.astro";
+import RoomPhoto from "../RoomPhoto.astro";
+import CallButton from "../CallButton.astro";
+import StatusLine from "../StatusLine.astro";
+import Icon from "../Icon.astro";
+import hero from "../../assets/img/hero-vitalnia.jpg";
+import { address, mapUrl } from "../../data/clinic";
+---
+<Section id="hero" class="hero" rec="R-004,R-013">
+  <div class="hero__grid room-grid">
+    <div class="hero__text">
+      <h1>Сімейна стоматологія в&nbsp;Ужгороді</h1>
+      <p class="hero__lead">Від профілактики до комплексного відновлення усмішки — для дітей і&nbsp;дорослих.</p>
+      <div class="hero__actions">
+        <CallButton class="hero__call" />
+        <a class="link" href={mapUrl} target="_blank" rel="noopener" data-rec="R-013">
+          <Icon name="pin" /><span>Маршрут</span><span class="visually-hidden">(Google Maps, нова вкладка)</span>
+        </a>
+      </div>
+      <StatusLine class="hero__status" suffix={`${address.street}, ${address.floor}`} />
+    </div>
+    <RoomPhoto
+      class="hero__media bleed-right"
+      src={hero}
+      alt="Команда HomeClinic у вітальні клініки: бірюзове крісло, фіолетові штори, оксамитовий диван"
+      widths={[390, 560, 670]}
+      sizes="(min-width: 64em) 50vw, 100vw"
+      priority
+      reveal={false}
+      position="60% 40%"
+    />
+    <ul class="hero__proof" role="list">
+      <li><span class="num">4,8</span> з 5 за <span class="num">297</span> відгуками на top20.ua, станом на 12.11.2026</li>
+      <li>«Вибір Країни 2024»: Стоматологія року в&nbsp;Ужгороді</li>
+    </ul>
+  </div>
+</Section>
+
+<style>
+  .hero { padding-block: var(--s-4) 0; }
+  .hero__grid { row-gap: var(--s-4); }
+  .hero__text { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-3); align-content: start; }
+  .hero__lead { font-size: var(--fs-lead); max-width: 40ch; color: var(--color-text); }
+  .hero__status { font-size: var(--fs-small); }
+  @media (max-width: 63.99em) {
+    .hero :global(.hero__status .status__suffix) { display: block; }
+    .hero :global(.hero__status .status__suffix::before) { content: none; }
+  }
+  .hero__actions { display: grid; gap: var(--s-1); justify-items: start; }
+  .hero__actions :global(.hero__call) { width: 100%; }
+  .hero :global(.hero__media) { grid-column: full-start / full-end; aspect-ratio: 390 / 340; animation: roof-rise var(--dur-roof) var(--ease-out) 150ms both; }
+  .hero__proof { display: grid; gap: var(--s-1); padding-bottom: var(--s-6); font-size: var(--fs-small); color: var(--color-text-muted); }
+  .hero__proof li { padding-left: var(--s-2); border-left: 2px solid var(--color-decor); }
+
+  @media (min-width: 40em) {
+    .hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3); }
+    .hero__actions :global(.hero__call) { width: auto; }
+    .hero :global(.hero__media) { aspect-ratio: 16 / 10; }
+  }
+  @media (min-width: 64em) {
+    .hero { padding-block: var(--s-6) 0; }
+    .hero__grid { grid-template-rows: auto 1fr; row-gap: var(--s-4); }
+    .hero__text { grid-column: 2 / 8; grid-row: 1; padding-top: var(--s-6); gap: var(--s-4); }
+    .hero__proof { grid-column: 2 / 8; grid-row: 2; align-self: end; padding-bottom: 0; }
+    .hero :global(.hero__media) { grid-column: 8 / full-end; grid-row: 1 / 3; aspect-ratio: auto; height: clamp(30rem, 62svh, 36rem); }
+  }
+  @media (prefers-reduced-motion: reduce) { .hero :global(.hero__media) { animation: none; } }
+</style>

@@ -1,0 +1,56 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import MobileBar from "../components/MobileBar.astro";
+import Hero from "../components/sections/Hero.astro";
+import Directions from "../components/sections/Directions.astro";
+import Kids from "../components/sections/Kids.astro";
+import Care from "../components/sections/Care.astro";
+import Doctors from "../components/sections/Doctors.astro";
+import Cost from "../components/sections/Cost.astro";
+import Visit from "../components/sections/Visit.astro";
+import { phones, email, address, instagram, mapUrl } from "../data/clinic";
+
+const title = "Сімейна стоматологія в Ужгороді — MistoDent HomeClinic, вул. Фединця, 19";
+const description = "Лікування, імплантація, протезування і дитяча стоматологія без страху в Ужгороді. Оплата частинами monobank. Пн–Пт 9–20, Сб 9–18, Нд 10–17. +380 97 441 41 14";
+
+// R-014: schema.org Dentist (W-F005 hours, three Uzhhorod phones, Instagram only in sameAs, no aggregateRating)
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Dentist",
+  name: "MistoDent HomeClinic",
+  description: "Сімейна стоматологія в Ужгороді",
+  telephone: phones.map((p) => p.tel),
+  email,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: `${address.street} (${address.floor})`,
+    addressLocality: address.city,
+    addressRegion: address.region,
+    postalCode: address.postal,
+    addressCountry: "UA",
+  },
+  hasMap: mapUrl,
+  openingHoursSpecification: [
+    { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "09:00", closes: "20:00" },
+    { "@type": "OpeningHoursSpecification", dayOfWeek: "Saturday", opens: "09:00", closes: "18:00" },
+    { "@type": "OpeningHoursSpecification", dayOfWeek: "Sunday", opens: "10:00", closes: "17:00" },
+  ],
+  sameAs: [instagram],
+  parentOrganization: { "@type": "Organization", name: "МістоДент" },
+};
+---
+<Base lang="uk" title={title} description={description}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} data-rec="R-014" />
+  <Header slot="header" />
+  <Hero />
+  <Directions />
+  <Kids />
+  <Care />
+  <Doctors />
+  <Cost />
+  <Visit />
+  <Footer slot="footer" />
+  <MobileBar slot="footer" />
+</Base>

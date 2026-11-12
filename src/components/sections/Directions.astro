@@ -1,0 +1,129 @@
+---
+// «З чим ви до нас?» — four situations (W-F006 inside). Disclosure buttons: one open at a time.
+// Desktop: situations on the left, the open one's photo and services on the right. Phone: rows that open in place.
+// Without JS every panel is open (content visible).
+import Section from "../Section.astro";
+import FutureLink from "../FutureLink.astro";
+import CallButton from "../CallButton.astro";
+import Icon from "../Icon.astro";
+import { Picture } from "astro:assets";
+import dytyni from "../../assets/img/dir-dytyni.jpg";
+import bolyt from "../../assets/img/services-1-02.jpg";
+import nemaie from "../../assets/img/services-5-02.jpg";
+import usmishka from "../../assets/img/services-4-02.jpg";
+import { situations, FUTURE } from "../../data/clinic";
+
+const imgs = { dytyni, bolyt, nemaie, usmishka };
+const alts = {
+  dytyni: "Усміхнена дівчинка в дитячому кріслі клініки",
+  bolyt: "Лікарка показує пацієнтці знімок зубів на моніторі біля крісла",
+  nemaie: "Лікар HomeClinic пояснює пацієнтці план лікування в кабінеті",
+  usmishka: "Лампа для офісного відбілювання Beyond у клініці",
+};
+---
+<Section id="directions" class="section dir" rec="R-006">
+  <div class="container">
+    <h2 class="dir__title">З чим ви до нас?</h2>
+    <div class="dir__grid" data-situations>
+      {situations.map((s, i) => (
+        <>
+          <h3 class="dir__head" style={`--row:${i + 1}`}>
+            <button class="dir__btn" type="button" id={`sit-${s.id}`} aria-expanded={i === 0 ? "true" : "false"} aria-controls={`sit-${s.id}-panel`} data-sit-btn>
+              <span>{s.title}</span>
+              <Icon name="arrow" class="dir__chev" />
+            </button>
+          </h3>
+          <div class="dir__panel" id={`sit-${s.id}-panel`} role="region" aria-labelledby={`sit-${s.id}`} data-sit-panel>
+            <div class="dir__photo">
+              <Picture src={imgs[s.img]} alt={alts[s.img]} widths={[390, 640, 860]} sizes="(min-width: 64em) 55vw, 100vw" formats={["avif", "webp"]} fallbackFormat="jpg" quality={76} loading="lazy" />
+            </div>
+            <div class="dir__body">
+              <p class="dir__lead">{s.lead}</p>
+              <ul class="dir__services" role="list" aria-label="Послуги">
+                {s.services.map((name) => <li><FutureLink note={FUTURE}>{name}</FutureLink></li>)}
+              </ul>
+              <div class="dir__actions">
+                <a class="link" href={s.anchor.href}><span>{s.anchor.label}</span><Icon name="arrow" /></a>
+                <CallButton size="sm" label="Зателефонувати" showNumber={false} />
+              </div>
+            </div>
+          </div>
+        </>
+      ))}
+    </div>
+  </div>
+</Section>
+
+<script>
+  const root = document.querySelector<HTMLElement>("[data-situations]");
+  if (root) {
+    const btns = [...root.querySelectorAll<HTMLButtonElement>("[data-sit-btn]")];
+    const panelOf = (b: HTMLButtonElement) => document.getElementById(b.getAttribute("aria-controls") || "");
+    const desktop = window.matchMedia("(min-width: 64em)");
+    const open = (target: HTMLButtonElement, toggle: boolean) => {
+      const wasOpen = target.getAttribute("aria-expanded") === "true";
+      btns.forEach((b) => {
+        const on = b === target ? (toggle && !desktop.matches ? !wasOpen : true) : false;
+        b.setAttribute("aria-expanded", String(on));
+        const p = panelOf(b);
+        if (p) p.hidden = !on;
+      });
+    };
+    root.classList.add("is-enhanced");
+    open(btns[0], false);
+    btns.forEach((b, i) => {
+      b.addEventListener("click", () => open(b, true));
+      b.addEventListener("keydown", (e) => {
+        const k = e.key;
+        let n = -1;
+        if (k === "ArrowDown" || k === "ArrowRight") n = (i + 1) % btns.length;
+        if (k === "ArrowUp" || k === "ArrowLeft") n = (i - 1 + btns.length) % btns.length;
+        if (k === "Home") n = 0;
+        if (k === "End") n = btns.length - 1;
+        if (n >= 0) { e.preventDefault(); btns[n].focus(); }
+      });
+    });
+    // On desktop one panel is always open.
+    desktop.addEventListener("change", () => {
+      if (desktop.matches && !btns.some((b) => b.getAttribute("aria-expanded") === "true")) open(btns[0], false);
+    });
+  }
+</script>
+
+<style>
+  .dir__title { margin-bottom: var(--s-6); }
+  .dir__head { border-top: 1px solid var(--color-decor); }
+  .dir__head:last-of-type { border-bottom: 1px solid var(--color-decor); }
+  .dir__btn {
+    display: flex; align-items: center; justify-content: space-between; gap: var(--s-2); width: 100%; min-height: 4.5rem;
+    padding: var(--s-2) var(--s-2) var(--s-2) var(--s-3); border: 0; border-left: 6px solid transparent; background: none;
+    color: var(--color-plum); font: 500 clamp(1.5rem, 1.1rem + 1.7vw, 2.5rem)/1.15 var(--font-display); text-align: left; cursor: pointer;
+    transition: border-color var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out);
+  }
+  .dir__btn:hover { background: var(--color-peach); }
+  .dir__btn[aria-expanded="true"] { border-left-color: var(--color-plum); font-weight: 600; }
+  .dir__btn :global(.dir__chev) { width: 1.5rem; height: 1.5rem; flex: none; transform: rotate(90deg); transition: transform 250ms var(--ease-out); }
+  .dir__btn[aria-expanded="true"] :global(.dir__chev) { transform: rotate(-90deg); }
+  .dir__panel { display: grid; gap: var(--s-3); padding-block: var(--s-2) var(--s-4); }
+  .dir__panel[hidden] { display: none; }
+  .dir__panel:not([hidden]) { animation: sit-in 250ms var(--ease-out); }
+  .dir__photo { aspect-ratio: 3 / 2; overflow: hidden; border-radius: var(--radius); background: var(--color-peach); }
+  .dir__photo :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .dir__body { display: grid; gap: var(--s-3); }
+  .dir__lead { font-size: var(--fs-lead); max-width: 48ch; }
+  .dir__services { display: flex; flex-wrap: wrap; gap: var(--s-1) var(--s-3); }
+  .dir__services :global(.future-link) { font-weight: 500; color: var(--color-text); }
+  .dir__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2) var(--s-4); }
+  @keyframes sit-in { from { opacity: 0; transform: translateY(8px); } }
+
+  @media (min-width: 64em) {
+    .dir__grid.is-enhanced { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: var(--s-8); grid-template-rows: repeat(4, auto) 1fr; }
+    .dir__grid.is-enhanced .dir__head { grid-column: 1; grid-row: var(--row); }
+    .dir__grid.is-enhanced .dir__panel { grid-column: 2; grid-row: 1 / 6; padding: 0; align-content: start; }
+    .dir__grid.is-enhanced .dir__btn { min-height: 6rem; }
+    .dir__grid.is-enhanced .dir__photo { aspect-ratio: 16 / 10; }
+    .dir__grid.is-enhanced .dir__btn :global(.dir__chev) { transform: none; opacity: 0; }
+    .dir__grid.is-enhanced .dir__btn[aria-expanded="true"] :global(.dir__chev) { opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) { .dir__panel:not([hidden]) { animation: none; } }
+</style>
